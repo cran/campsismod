@@ -5,16 +5,16 @@ EXPORT_PNG <- FALSE
 library(campsismod)
 
 ## -----------------------------------------------------------------------------
-model <- model_library$advan4_trans4
+model <- model_suite$pk$`2cpt_fo`
 model
 
 ## -----------------------------------------------------------------------------
 model %>% find(Theta("CL"))
 model %>% find(Omega("KA"))
-model %>% find(Sigma("PROP"))
+model %>% find(Sigma("RUV_FIX"))
 
 ## -----------------------------------------------------------------------------
-model@parameters %>% getByIndex(Theta(index=2))
+model@parameters %>% getByIndex(Theta(index=5))
 model@parameters %>% getByIndex(Omega(index=1, index2=1))
 model@parameters %>% getByIndex(Sigma(index=1, index2=1))
 
@@ -32,7 +32,7 @@ theta_standardised@value
 
 ## -----------------------------------------------------------------------------
 model <- model %>% replace(Theta("KA", value=2)) # Previous value for KA was 1
-model <- model %>% replace(Omega("CL", value=20, type="cv%")) # Previous value was a variance of 0.025
+model <- model %>% replace(Omega("CL", value=20, type="cv%")) # Previous value was a 25% CV
 model
 
 ## -----------------------------------------------------------------------------
