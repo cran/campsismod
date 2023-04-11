@@ -1,3 +1,13 @@
+# campsismod 1.0.0
+
+* New method 'addSuffix' to combine several models #61
+* Code review: extra parameters to mrgsolve model #62
+
+# campsismod 0.9.1
+
+* Regenerate model suite #59
+* Read model equations from character vector #58
+
 # campsismod 0.9.0
 
 * New suite of models (> 100 model templates of all kinds: PK, PD, TMDD, etc.) #54
