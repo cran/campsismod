@@ -33,7 +33,7 @@ pkpd_model
 #  ggplot2::ggsave(filename="resources/pkpd_model_concentration.png", width=7, height=3, dpi=100)
 
 ## ---- eval=EXPORT_PNG---------------------------------------------------------
-#  shadedPlot(results, "A_EFFECT")
+#  shadedPlot(results, "EFFECT")
 
 ## ---- eval=EXPORT_PNG, echo=FALSE, results='hide'-----------------------------
 #  ggplot2::ggsave(filename="resources/pkpd_model_effect.png", width=7, height=3, dpi=100)

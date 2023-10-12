@@ -119,13 +119,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -336,7 +343,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="prerequisite" class="section level3">
 <h3>Prerequisite</h3>
 <p>The examples below require the package <code>campismod</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(campsismod)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(campsismod)</span></code></pre></div>
 </div>
 <div id="retrieve-your-parameters" class="section level3">
 <h3>Retrieve your parameters</h3>
@@ -344,54 +351,55 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 2-compartment PK model that you find in the built-in library. This model
 has 5 parameters. All these parameters have inter-individual variability
 defined.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model_suite<span class="sc">$</span>pk<span class="sc">$</span><span class="st">`</span><span class="at">2cpt_fo</span><span class="st">`</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> model_suite<span class="sc">$</span>pk<span class="sc">$</span><span class="st">`</span><span class="at">2cpt_fo</span><span class="st">`</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>model</span></code></pre></div>
 <pre><code>## [MAIN]
+## TVBIO=THETA_BIO
 ## TVKA=THETA_KA
 ## TVVC=THETA_VC
 ## TVVP=THETA_VP
 ## TVQ=THETA_Q
 ## TVCL=THETA_CL
-## TVPROP_RUV=THETA_PROP_RUV
 ## 
+## BIO=TVBIO
 ## KA=TVKA * exp(ETA_KA)
 ## VC=TVVC * exp(ETA_VC)
 ## VP=TVVP * exp(ETA_VP)
 ## Q=TVQ * exp(ETA_Q)
 ## CL=TVCL * exp(ETA_CL)
-## PROP_RUV=TVPROP_RUV
 ## 
 ## [ODE]
 ## d/dt(A_ABS)=-KA*A_ABS
 ## d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL
 ## d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL
 ## 
+## [F]
+## A_ABS=BIO
+## 
 ## [ERROR]
 ## CONC=A_CENTRAL/VC
 ## if (CONC &lt;= 0.001) CONC=0.001
-## IPRED=log(CONC)
-## W=PROP_RUV
-## Y=IPRED + W*EPS_RUV_FIX
+## CONC_ERR=CONC*(1 + EPS_PROP_RUV)
 ## 
 ## 
 ## THETA&#39;s:
-##       name index value   fix
-## 1       KA     1   1.0 FALSE
-## 2       VC     2  60.0 FALSE
-## 3       VP     3  10.0 FALSE
-## 4        Q     4   2.0 FALSE
-## 5       CL     5   3.0 FALSE
-## 6 PROP_RUV     6   0.1 FALSE
+##   name index value   fix                            label unit
+## 1  BIO     1     1 FALSE                  Bioavailability &lt;NA&gt;
+## 2   KA     2     1 FALSE                  Absorption rate  1/h
+## 3   VC     3    10 FALSE    Volume of central compartment    L
+## 4   VP     4    40 FALSE Volume of peripheral compartment    L
+## 5    Q     5    20 FALSE           Inter-compartment flow  L/h
+## 6   CL     6     3 FALSE                        Clearance  L/h
 ## OMEGA&#39;s:
-##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA
-## 2   VC     2      2    25 FALSE  cv%   NA
-## 3   VP     3      3    25 FALSE  cv%   NA
-## 4    Q     4      4    25 FALSE  cv%   NA
-## 5   CL     5      5    25 FALSE  cv%   NA
+##   name index index2 value   fix type
+## 1   KA     1      1    25 FALSE  cv%
+## 2   VC     2      2    25 FALSE  cv%
+## 3   VP     3      3    25 FALSE  cv%
+## 4    Q     4      4    25 FALSE  cv%
+## 5   CL     5      5    25 FALSE  cv%
 ## SIGMA&#39;s:
-##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var
+##       name index index2 value   fix type
+## 1 PROP_RUV     1      1   0.1 FALSE   sd
 ## No variance-covariance matrix
 ## 
 ## Compartments:
@@ -400,34 +408,33 @@ defined.</p>
 ## A_PERIPHERAL (CMT=3)</code></pre>
 <p>To retrieve a parameter by its name, just call the method
 <code>find</code> as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Theta</span>(<span class="st">&quot;CL&quot;</span>))</span></code></pre></div>
-<pre><code>##   name index value   fix
-## 1   CL     5     3 FALSE</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Omega</span>(<span class="st">&quot;KA&quot;</span>))</span></code></pre></div>
-<pre><code>##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Sigma</span>(<span class="st">&quot;RUV_FIX&quot;</span>))</span></code></pre></div>
-<pre><code>##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Theta</span>(<span class="st">&quot;CL&quot;</span>))</span></code></pre></div>
+<pre><code>##   name index value   fix     label unit comment
+## 1   CL     6     3 FALSE Clearance  L/h    &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Omega</span>(<span class="st">&quot;KA&quot;</span>))</span></code></pre></div>
+<pre><code>##   name index index2 value   fix type same label comment
+## 1   KA     1      1    25 FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Sigma</span>(<span class="st">&quot;RUV_FIX&quot;</span>))</span></code></pre></div>
+<pre><code>## NULL</code></pre>
 <p>These parameters can also alternatively be retrieved by their
 index(es). Use the specific method <code>getByIndex</code> created for
 that purpose:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Theta</span>(<span class="at">index=</span><span class="dv">5</span>))</span></code></pre></div>
-<pre><code>##   name index value   fix
-## 1   CL     5     3 FALSE</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Omega</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
-<pre><code>##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Sigma</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
-<pre><code>##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Theta</span>(<span class="at">index=</span><span class="dv">5</span>))</span></code></pre></div>
+<pre><code>##   name index value   fix                  label unit comment
+## 1    Q     5    20 FALSE Inter-compartment flow  L/h    &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Omega</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
+<pre><code>##   name index index2 value   fix type same label comment
+## 1   KA     1      1    25 FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Sigma</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
+<pre><code>##       name index index2 value   fix type label comment
+## 1 PROP_RUV     1      1   0.1 FALSE   sd  &lt;NA&gt;    &lt;NA&gt;</code></pre>
 </div>
 <div id="access-parameter-values" class="section level3">
 <h3>Access parameter values</h3>
 <p>Accessing parameter values is straightforward. Parameters have a slot
 <code>value</code> that may be accessed.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>thetaCL <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Theta</span>(<span class="st">&quot;CL&quot;</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>thetaCL<span class="sc">@</span>value</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>thetaCL <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Theta</span>(<span class="st">&quot;CL&quot;</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>thetaCL<span class="sc">@</span>value</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>For OMEGA and SIGMA parameters, be careful; the interpretation of
 this value depends on the <code>type</code> of the parameter. It may be
@@ -439,68 +446,69 @@ For a quick access to the value as variance or covariance, the method
 <code>standardise</code> can be called first on the parameter itself.
 This is especially useful for values expressed in CV or in standard
 deviation.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">Omega</span>(<span class="at">name=</span><span class="st">&quot;TEST&quot;</span>, <span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>, <span class="at">value=</span><span class="dv">15</span>, <span class="at">type=</span><span class="st">&quot;cv%&quot;</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>theta<span class="sc">@</span>value <span class="co"># 15 is returned</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">Omega</span>(<span class="at">name=</span><span class="st">&quot;TEST&quot;</span>, <span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>, <span class="at">value=</span><span class="dv">15</span>, <span class="at">type=</span><span class="st">&quot;cv%&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>theta<span class="sc">@</span>value <span class="co"># 15 is returned</span></span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>theta_standardised <span class="ot">&lt;-</span> theta <span class="sc">%&gt;%</span> <span class="fu">standardise</span>() <span class="co"># Conversion to variance</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>theta_standardised </span></code></pre></div>
-<pre><code>##   name index index2      value   fix type same
-## 1 TEST     1      1 0.02225061 FALSE  var   NA</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>theta_standardised<span class="sc">@</span>value</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>theta_standardised <span class="ot">&lt;-</span> theta <span class="sc">%&gt;%</span> <span class="fu">standardise</span>() <span class="co"># Conversion to variance</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>theta_standardised </span></code></pre></div>
+<pre><code>##   name index index2      value   fix type same label comment
+## 1 TEST     1      1 0.02225061 FALSE  var   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>theta_standardised<span class="sc">@</span>value</span></code></pre></div>
 <pre><code>## [1] 0.02225061</code></pre>
 </div>
 <div id="replace-parameters" class="section level3">
 <h3>Replace parameters</h3>
 <p>Parameters can be replaced easily. Here are a few examples:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">replace</span>(<span class="fu">Theta</span>(<span class="st">&quot;KA&quot;</span>, <span class="at">value=</span><span class="dv">2</span>)) <span class="co"># Previous value for KA was 1</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">replace</span>(<span class="fu">Omega</span>(<span class="st">&quot;CL&quot;</span>, <span class="at">value=</span><span class="dv">20</span>, <span class="at">type=</span><span class="st">&quot;cv%&quot;</span>)) <span class="co"># Previous value was a 25% CV</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">replace</span>(<span class="fu">Theta</span>(<span class="st">&quot;KA&quot;</span>, <span class="at">value=</span><span class="dv">2</span>)) <span class="co"># Previous value for KA was 1</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">replace</span>(<span class="fu">Omega</span>(<span class="st">&quot;CL&quot;</span>, <span class="at">value=</span><span class="dv">20</span>, <span class="at">type=</span><span class="st">&quot;cv%&quot;</span>)) <span class="co"># Previous value was a 25% CV</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>model</span></code></pre></div>
 <pre><code>## [MAIN]
+## TVBIO=THETA_BIO
 ## TVKA=THETA_KA
 ## TVVC=THETA_VC
 ## TVVP=THETA_VP
 ## TVQ=THETA_Q
 ## TVCL=THETA_CL
-## TVPROP_RUV=THETA_PROP_RUV
 ## 
+## BIO=TVBIO
 ## KA=TVKA * exp(ETA_KA)
 ## VC=TVVC * exp(ETA_VC)
 ## VP=TVVP * exp(ETA_VP)
 ## Q=TVQ * exp(ETA_Q)
 ## CL=TVCL * exp(ETA_CL)
-## PROP_RUV=TVPROP_RUV
 ## 
 ## [ODE]
 ## d/dt(A_ABS)=-KA*A_ABS
 ## d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL
 ## d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL
 ## 
+## [F]
+## A_ABS=BIO
+## 
 ## [ERROR]
 ## CONC=A_CENTRAL/VC
 ## if (CONC &lt;= 0.001) CONC=0.001
-## IPRED=log(CONC)
-## W=PROP_RUV
-## Y=IPRED + W*EPS_RUV_FIX
+## CONC_ERR=CONC*(1 + EPS_PROP_RUV)
 ## 
 ## 
 ## THETA&#39;s:
-##       name index value   fix
-## 1       KA     1   2.0 FALSE
-## 2       VC     2  60.0 FALSE
-## 3       VP     3  10.0 FALSE
-## 4        Q     4   2.0 FALSE
-## 5       CL     5   3.0 FALSE
-## 6 PROP_RUV     6   0.1 FALSE
+##   name index value   fix                            label unit
+## 1  BIO     1     1 FALSE                  Bioavailability &lt;NA&gt;
+## 2   KA     2     2 FALSE                             &lt;NA&gt; &lt;NA&gt;
+## 3   VC     3    10 FALSE    Volume of central compartment    L
+## 4   VP     4    40 FALSE Volume of peripheral compartment    L
+## 5    Q     5    20 FALSE           Inter-compartment flow  L/h
+## 6   CL     6     3 FALSE                        Clearance  L/h
 ## OMEGA&#39;s:
-##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA
-## 2   VC     2      2    25 FALSE  cv%   NA
-## 3   VP     3      3    25 FALSE  cv%   NA
-## 4    Q     4      4    25 FALSE  cv%   NA
-## 5   CL     5      5    20 FALSE  cv%   NA
+##   name index index2 value   fix type
+## 1   KA     1      1    25 FALSE  cv%
+## 2   VC     2      2    25 FALSE  cv%
+## 3   VP     3      3    25 FALSE  cv%
+## 4    Q     4      4    25 FALSE  cv%
+## 5   CL     5      5    20 FALSE  cv%
 ## SIGMA&#39;s:
-##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var
+##       name index index2 value   fix type
+## 1 PROP_RUV     1      1   0.1 FALSE   sd
 ## No variance-covariance matrix
 ## 
 ## Compartments:
@@ -513,53 +521,54 @@ deviation.</p>
 <p>Parameters can be deleted. Please note that it does not do anything
 to the equations. Also, the indexes won’t be re-adjusted. Here are a few
 examples:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">delete</span>(<span class="fu">Theta</span>(<span class="st">&quot;KA&quot;</span>))</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">delete</span>(<span class="fu">Omega</span>(<span class="st">&quot;CL&quot;</span>))</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>model</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">delete</span>(<span class="fu">Theta</span>(<span class="st">&quot;KA&quot;</span>))</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">delete</span>(<span class="fu">Omega</span>(<span class="st">&quot;CL&quot;</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>model</span></code></pre></div>
 <pre><code>## [MAIN]
+## TVBIO=THETA_BIO
 ## TVKA=THETA_KA
 ## TVVC=THETA_VC
 ## TVVP=THETA_VP
 ## TVQ=THETA_Q
 ## TVCL=THETA_CL
-## TVPROP_RUV=THETA_PROP_RUV
 ## 
+## BIO=TVBIO
 ## KA=TVKA * exp(ETA_KA)
 ## VC=TVVC * exp(ETA_VC)
 ## VP=TVVP * exp(ETA_VP)
 ## Q=TVQ * exp(ETA_Q)
 ## CL=TVCL * exp(ETA_CL)
-## PROP_RUV=TVPROP_RUV
 ## 
 ## [ODE]
 ## d/dt(A_ABS)=-KA*A_ABS
 ## d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL
 ## d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL
 ## 
+## [F]
+## A_ABS=BIO
+## 
 ## [ERROR]
 ## CONC=A_CENTRAL/VC
 ## if (CONC &lt;= 0.001) CONC=0.001
-## IPRED=log(CONC)
-## W=PROP_RUV
-## Y=IPRED + W*EPS_RUV_FIX
+## CONC_ERR=CONC*(1 + EPS_PROP_RUV)
 ## 
 ## 
 ## THETA&#39;s:
-##       name index value   fix
-## 1       VC     2  60.0 FALSE
-## 2       VP     3  10.0 FALSE
-## 3        Q     4   2.0 FALSE
-## 4       CL     5   3.0 FALSE
-## 5 PROP_RUV     6   0.1 FALSE
+##   name index value   fix                            label unit
+## 1  BIO     1     1 FALSE                  Bioavailability &lt;NA&gt;
+## 2   VC     3    10 FALSE    Volume of central compartment    L
+## 3   VP     4    40 FALSE Volume of peripheral compartment    L
+## 4    Q     5    20 FALSE           Inter-compartment flow  L/h
+## 5   CL     6     3 FALSE                        Clearance  L/h
 ## OMEGA&#39;s:
-##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA
-## 2   VC     2      2    25 FALSE  cv%   NA
-## 3   VP     3      3    25 FALSE  cv%   NA
-## 4    Q     4      4    25 FALSE  cv%   NA
+##   name index index2 value   fix type
+## 1   KA     1      1    25 FALSE  cv%
+## 2   VC     2      2    25 FALSE  cv%
+## 3   VP     3      3    25 FALSE  cv%
+## 4    Q     4      4    25 FALSE  cv%
 ## SIGMA&#39;s:
-##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var
+##       name index index2 value   fix type
+## 1 PROP_RUV     1      1   0.1 FALSE   sd
 ## No variance-covariance matrix
 ## 
 ## Compartments:
@@ -567,10 +576,10 @@ examples:</p>
 ## A_CENTRAL (CMT=2)
 ## A_PERIPHERAL (CMT=3)</code></pre>
 <p>As expected, this model will not be valid anymore:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tryCatch</span>({<span class="fu">validObject</span>(model, <span class="at">complete=</span><span class="cn">TRUE</span>)}, <span class="at">error=</span><span class="cf">function</span>(msg) {</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(msg)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
-<pre><code>## &lt;simpleError in validObject(model, complete = TRUE): invalid class &quot;campsis_model&quot; object: In slot &quot;parameters&quot; of class &quot;parameters&quot;: First THETA index is different than 1&gt;</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">tryCatch</span>({<span class="fu">validObject</span>(model, <span class="at">complete=</span><span class="cn">TRUE</span>)}, <span class="at">error=</span><span class="cf">function</span>(msg) {</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>  <span class="fu">print</span>(msg)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>})</span></code></pre></div>
+<pre><code>## &lt;simpleError in validObject(model, complete = TRUE): objet de classe &quot;campsis_model&quot; incorrect: In slot &quot;parameters&quot; of class &quot;parameters&quot;: No THETA with index 2&gt;</code></pre>
 </div>
 
 

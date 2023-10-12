@@ -119,13 +119,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -338,57 +345,58 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>First import the <code>campsismod</code> package. This step is not
 required if you have already loaded the <code>campsis</code>
 package.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(campsismod)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(campsismod)</span></code></pre></div>
 <p>Load 2-compartment PK model from built-in model library and show
 content.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> model_suite<span class="sc">$</span>pk<span class="sc">$</span><span class="st">`</span><span class="at">2cpt_fo</span><span class="st">`</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">show</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> model_suite<span class="sc">$</span>pk<span class="sc">$</span><span class="st">`</span><span class="at">2cpt_fo</span><span class="st">`</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">show</span>(model)</span></code></pre></div>
 <pre><code>## [MAIN]
+## TVBIO=THETA_BIO
 ## TVKA=THETA_KA
 ## TVVC=THETA_VC
 ## TVVP=THETA_VP
 ## TVQ=THETA_Q
 ## TVCL=THETA_CL
-## TVPROP_RUV=THETA_PROP_RUV
 ## 
+## BIO=TVBIO
 ## KA=TVKA * exp(ETA_KA)
 ## VC=TVVC * exp(ETA_VC)
 ## VP=TVVP * exp(ETA_VP)
 ## Q=TVQ * exp(ETA_Q)
 ## CL=TVCL * exp(ETA_CL)
-## PROP_RUV=TVPROP_RUV
 ## 
 ## [ODE]
 ## d/dt(A_ABS)=-KA*A_ABS
 ## d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL
 ## d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL
 ## 
+## [F]
+## A_ABS=BIO
+## 
 ## [ERROR]
 ## CONC=A_CENTRAL/VC
 ## if (CONC &lt;= 0.001) CONC=0.001
-## IPRED=log(CONC)
-## W=PROP_RUV
-## Y=IPRED + W*EPS_RUV_FIX
+## CONC_ERR=CONC*(1 + EPS_PROP_RUV)
 ## 
 ## 
 ## THETA&#39;s:
-##       name index value   fix
-## 1       KA     1   1.0 FALSE
-## 2       VC     2  60.0 FALSE
-## 3       VP     3  10.0 FALSE
-## 4        Q     4   2.0 FALSE
-## 5       CL     5   3.0 FALSE
-## 6 PROP_RUV     6   0.1 FALSE
+##   name index value   fix                            label unit
+## 1  BIO     1     1 FALSE                  Bioavailability &lt;NA&gt;
+## 2   KA     2     1 FALSE                  Absorption rate  1/h
+## 3   VC     3    10 FALSE    Volume of central compartment    L
+## 4   VP     4    40 FALSE Volume of peripheral compartment    L
+## 5    Q     5    20 FALSE           Inter-compartment flow  L/h
+## 6   CL     6     3 FALSE                        Clearance  L/h
 ## OMEGA&#39;s:
-##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA
-## 2   VC     2      2    25 FALSE  cv%   NA
-## 3   VP     3      3    25 FALSE  cv%   NA
-## 4    Q     4      4    25 FALSE  cv%   NA
-## 5   CL     5      5    25 FALSE  cv%   NA
+##   name index index2 value   fix type
+## 1   KA     1      1    25 FALSE  cv%
+## 2   VC     2      2    25 FALSE  cv%
+## 3   VP     3      3    25 FALSE  cv%
+## 4    Q     4      4    25 FALSE  cv%
+## 5   CL     5      5    25 FALSE  cv%
 ## SIGMA&#39;s:
-##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var
+##       name index index2 value   fix type
+## 1 PROP_RUV     1      1   0.1 FALSE   sd
 ## No variance-covariance matrix
 ## 
 ## Compartments:
@@ -399,9 +407,9 @@ content.</p>
 <div id="write-campsis-model" class="section level3">
 <h3>Write CAMPSIS model</h3>
 <p>A CAMPSIS model can be persisted on your local drive as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">write</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">write</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;model.campsis&quot; &quot;omega.csv&quot;     &quot;sigma.csv&quot;     &quot;theta.csv&quot;</code></pre>
 <p>As shown, the output directory will contain the model (all code
 records) and 1 <code>csv</code> file per type of parameter (THETA, OMEGA
@@ -412,54 +420,55 @@ and SIGMA).</p>
 <p>To read a CAMPSIS model from your local drive, use the
 <code>read.campsis</code> function. The exact same model should be
 retrieved.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">read.campsis</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">show</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">read.campsis</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">show</span>(model)</span></code></pre></div>
 <pre><code>## [MAIN]
+## TVBIO=THETA_BIO
 ## TVKA=THETA_KA
 ## TVVC=THETA_VC
 ## TVVP=THETA_VP
 ## TVQ=THETA_Q
 ## TVCL=THETA_CL
-## TVPROP_RUV=THETA_PROP_RUV
 ## 
+## BIO=TVBIO
 ## KA=TVKA * exp(ETA_KA)
 ## VC=TVVC * exp(ETA_VC)
 ## VP=TVVP * exp(ETA_VP)
 ## Q=TVQ * exp(ETA_Q)
 ## CL=TVCL * exp(ETA_CL)
-## PROP_RUV=TVPROP_RUV
 ## 
 ## [ODE]
 ## d/dt(A_ABS)=-KA*A_ABS
 ## d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL
 ## d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL
 ## 
+## [F]
+## A_ABS=BIO
+## 
 ## [ERROR]
 ## CONC=A_CENTRAL/VC
 ## if (CONC &lt;= 0.001) CONC=0.001
-## IPRED=log(CONC)
-## W=PROP_RUV
-## Y=IPRED + W*EPS_RUV_FIX
+## CONC_ERR=CONC*(1 + EPS_PROP_RUV)
 ## 
 ## 
 ## THETA&#39;s:
-##       name index value   fix
-## 1       KA     1   1.0 FALSE
-## 2       VC     2  60.0 FALSE
-## 3       VP     3  10.0 FALSE
-## 4        Q     4   2.0 FALSE
-## 5       CL     5   3.0 FALSE
-## 6 PROP_RUV     6   0.1 FALSE
+##   name index value   fix                            label unit
+## 1  BIO     1     1 FALSE                  Bioavailability &lt;NA&gt;
+## 2   KA     2     1 FALSE                  Absorption rate  1/h
+## 3   VC     3    10 FALSE    Volume of central compartment    L
+## 4   VP     4    40 FALSE Volume of peripheral compartment    L
+## 5    Q     5    20 FALSE           Inter-compartment flow  L/h
+## 6   CL     6     3 FALSE                        Clearance  L/h
 ## OMEGA&#39;s:
-##   name index index2 value   fix type same
-## 1   KA     1      1    25 FALSE  cv%   NA
-## 2   VC     2      2    25 FALSE  cv%   NA
-## 3   VP     3      3    25 FALSE  cv%   NA
-## 4    Q     4      4    25 FALSE  cv%   NA
-## 5   CL     5      5    25 FALSE  cv%   NA
+##   name index index2 value   fix type
+## 1   KA     1      1    25 FALSE  cv%
+## 2   VC     2      2    25 FALSE  cv%
+## 3   VP     3      3    25 FALSE  cv%
+## 4    Q     4      4    25 FALSE  cv%
+## 5   CL     5      5    25 FALSE  cv%
 ## SIGMA&#39;s:
-##      name index index2 value  fix type
-## 1 RUV_FIX     1      1     1 TRUE  var
+##       name index index2 value   fix type
+## 1 PROP_RUV     1      1   0.1 FALSE   sd
 ## No variance-covariance matrix
 ## 
 ## Compartments:
@@ -481,37 +490,34 @@ supported by <code>campsis</code>. The following code exports the model
 to <code>RxODE</code>. Please note that this step is implicit in CAMPSIS
 when you call the <code>simulate</code> method with your preferred
 simulation engine.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rxmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;RxODE&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>rxmod</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>rxmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;RxODE&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>rxmod</span></code></pre></div>
 <pre><code>## An object of class &quot;rxode_model&quot;
 ## Slot &quot;code&quot;:
-##  [1] &quot;TVKA=THETA_KA&quot;                                                                  
-##  [2] &quot;TVVC=THETA_VC&quot;                                                                  
-##  [3] &quot;TVVP=THETA_VP&quot;                                                                  
-##  [4] &quot;TVQ=THETA_Q&quot;                                                                    
-##  [5] &quot;TVCL=THETA_CL&quot;                                                                  
-##  [6] &quot;TVPROP_RUV=THETA_PROP_RUV&quot;                                                      
+##  [1] &quot;TVBIO=THETA_BIO&quot;                                                                
+##  [2] &quot;TVKA=THETA_KA&quot;                                                                  
+##  [3] &quot;TVVC=THETA_VC&quot;                                                                  
+##  [4] &quot;TVVP=THETA_VP&quot;                                                                  
+##  [5] &quot;TVQ=THETA_Q&quot;                                                                    
+##  [6] &quot;TVCL=THETA_CL&quot;                                                                  
 ##  [7] &quot;&quot;                                                                               
-##  [8] &quot;KA=TVKA * exp(ETA_KA)&quot;                                                          
-##  [9] &quot;VC=TVVC * exp(ETA_VC)&quot;                                                          
-## [10] &quot;VP=TVVP * exp(ETA_VP)&quot;                                                          
-## [11] &quot;Q=TVQ * exp(ETA_Q)&quot;                                                             
-## [12] &quot;CL=TVCL * exp(ETA_CL)&quot;                                                          
-## [13] &quot;PROP_RUV=TVPROP_RUV&quot;                                                            
+##  [8] &quot;BIO=TVBIO&quot;                                                                      
+##  [9] &quot;KA=TVKA * exp(ETA_KA)&quot;                                                          
+## [10] &quot;VC=TVVC * exp(ETA_VC)&quot;                                                          
+## [11] &quot;VP=TVVP * exp(ETA_VP)&quot;                                                          
+## [12] &quot;Q=TVQ * exp(ETA_Q)&quot;                                                             
+## [13] &quot;CL=TVCL * exp(ETA_CL)&quot;                                                          
 ## [14] &quot;d/dt(A_ABS)=-KA*A_ABS&quot;                                                          
 ## [15] &quot;d/dt(A_CENTRAL)=KA*A_ABS + Q/VP*A_PERIPHERAL - Q/VC*A_CENTRAL - CL/VC*A_CENTRAL&quot;
 ## [16] &quot;d/dt(A_PERIPHERAL)=Q/VC*A_CENTRAL - Q/VP*A_PERIPHERAL&quot;                          
-## [17] &quot;CONC=A_CENTRAL/VC&quot;                                                              
-## [18] &quot;if (CONC &lt;= 0.001) CONC=0.001&quot;                                                  
-## [19] &quot;IPRED=log(CONC)&quot;                                                                
-## [20] &quot;W=PROP_RUV&quot;                                                                     
-## [21] &quot;Y=IPRED + W*EPS_RUV_FIX&quot;                                                        
+## [17] &quot;f(A_ABS)=BIO&quot;                                                                   
+## [18] &quot;CONC=A_CENTRAL/VC&quot;                                                              
+## [19] &quot;if (CONC &lt;= 0.001) CONC=0.001&quot;                                                  
+## [20] &quot;CONC_ERR=CONC*(1 + EPS_PROP_RUV)&quot;                                               
 ## 
 ## Slot &quot;theta&quot;:
-##       THETA_KA       THETA_VC       THETA_VP        THETA_Q       THETA_CL 
-##            1.0           60.0           10.0            2.0            3.0 
-## THETA_PROP_RUV 
-##            0.1 
+## THETA_BIO  THETA_KA  THETA_VC  THETA_VP   THETA_Q  THETA_CL 
+##         1         1        10        40        20         3 
 ## 
 ## Slot &quot;omega&quot;:
 ##            ETA_KA     ETA_VC     ETA_VP      ETA_Q     ETA_CL
@@ -522,37 +528,35 @@ simulation engine.</p>
 ## ETA_CL 0.00000000 0.00000000 0.00000000 0.00000000 0.06062462
 ## 
 ## Slot &quot;sigma&quot;:
-##             EPS_RUV_FIX
-## EPS_RUV_FIX           1</code></pre>
+##              EPS_PROP_RUV
+## EPS_PROP_RUV         0.01</code></pre>
 </div>
 <div id="export-campsis-model-to-mrgsolve" class="section level3">
 <h3>Export CAMPSIS model to mrgsolve</h3>
 <p>The following code exports the model to <code>mrgsolve</code> (text
 form).</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mrgmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;mrgsolve&quot;</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mrgmod</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>mrgmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;mrgsolve&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>mrgmod</span></code></pre></div>
 <pre><code>## An object of class &quot;mrgsolve_model&quot;
 ## Slot &quot;param&quot;:
-## [1] &quot;[PARAM] @annotated&quot;                   
-## [2] &quot;THETA_KA : 1 : THETA_KA&quot;              
-## [3] &quot;THETA_VC : 60 : THETA_VC&quot;             
-## [4] &quot;THETA_VP : 10 : THETA_VP&quot;             
-## [5] &quot;THETA_Q : 2 : THETA_Q&quot;                
-## [6] &quot;THETA_CL : 3 : THETA_CL&quot;              
-## [7] &quot;THETA_PROP_RUV : 0.1 : THETA_PROP_RUV&quot;
+## [1] &quot;[PARAM] @annotated&quot;        &quot;THETA_BIO : 1 : THETA_BIO&quot;
+## [3] &quot;THETA_KA : 1 : THETA_KA&quot;   &quot;THETA_VC : 10 : THETA_VC&quot; 
+## [5] &quot;THETA_VP : 40 : THETA_VP&quot;  &quot;THETA_Q : 20 : THETA_Q&quot;   
+## [7] &quot;THETA_CL : 3 : THETA_CL&quot;  
 ## 
 ## Slot &quot;cmt&quot;:
 ## [1] &quot;[CMT] @annotated&quot;          &quot;A_ABS : ABS&quot;              
 ## [3] &quot;A_CENTRAL : CENTRAL&quot;       &quot;A_PERIPHERAL : PERIPHERAL&quot;
 ## 
 ## Slot &quot;main&quot;:
-##  [1] &quot;[MAIN]&quot;                            &quot;double TVKA=THETA_KA;&quot;            
-##  [3] &quot;double TVVC=THETA_VC;&quot;             &quot;double TVVP=THETA_VP;&quot;            
-##  [5] &quot;double TVQ=THETA_Q;&quot;               &quot;double TVCL=THETA_CL;&quot;            
-##  [7] &quot;double TVPROP_RUV=THETA_PROP_RUV;&quot; &quot;&quot;                                 
-##  [9] &quot;double KA=TVKA * exp(ETA_KA);&quot;     &quot;double VC=TVVC * exp(ETA_VC);&quot;    
-## [11] &quot;double VP=TVVP * exp(ETA_VP);&quot;     &quot;double Q=TVQ * exp(ETA_Q);&quot;       
-## [13] &quot;double CL=TVCL * exp(ETA_CL);&quot;     &quot;double PROP_RUV=TVPROP_RUV;&quot;      
+##  [1] &quot;[MAIN]&quot;                        &quot;double TVBIO=THETA_BIO;&quot;      
+##  [3] &quot;double TVKA=THETA_KA;&quot;         &quot;double TVVC=THETA_VC;&quot;        
+##  [5] &quot;double TVVP=THETA_VP;&quot;         &quot;double TVQ=THETA_Q;&quot;          
+##  [7] &quot;double TVCL=THETA_CL;&quot;         &quot;&quot;                             
+##  [9] &quot;double BIO=TVBIO;&quot;             &quot;double KA=TVKA * exp(ETA_KA);&quot;
+## [11] &quot;double VC=TVVC * exp(ETA_VC);&quot; &quot;double VP=TVVP * exp(ETA_VP);&quot;
+## [13] &quot;double Q=TVQ * exp(ETA_Q);&quot;    &quot;double CL=TVCL * exp(ETA_CL);&quot;
+## [15] &quot;F_A_ABS=BIO;&quot;                 
 ## 
 ## Slot &quot;ode&quot;:
 ## [1] &quot;[ODE]&quot;                                                                          
@@ -569,12 +573,13 @@ form).</p>
 ## [6] &quot;ETA_CL : 0 0 0 0 0.0606246218164348 : ETA_CL&quot;
 ## 
 ## Slot &quot;sigma&quot;:
-## [1] &quot;[SIGMA] @annotated @block&quot;     &quot;EPS_RUV_FIX : 1 : EPS_RUV_FIX&quot;
+## [1] &quot;[SIGMA] @annotated @block&quot;          &quot;EPS_PROP_RUV : 0.01 : EPS_PROP_RUV&quot;
 ## 
 ## Slot &quot;table&quot;:
-## [1] &quot;[TABLE]&quot;                          &quot;capture CONC=A_CENTRAL/VC;&quot;      
-## [3] &quot;if (CONC &lt;= 0.001) CONC=0.001;&quot;   &quot;capture IPRED=log(CONC);&quot;        
-## [5] &quot;capture W=PROP_RUV;&quot;              &quot;capture Y=IPRED + W*EPS_RUV_FIX;&quot;
+## [1] &quot;[TABLE]&quot;                                  
+## [2] &quot;capture CONC=A_CENTRAL/VC;&quot;               
+## [3] &quot;if (CONC &lt;= 0.001) CONC=0.001;&quot;           
+## [4] &quot;capture CONC_ERR=CONC*(1 + EPS_PROP_RUV);&quot;
 ## 
 ## Slot &quot;capture&quot;:
 ## character(0)</code></pre>

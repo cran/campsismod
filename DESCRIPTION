@@ -1,7 +1,7 @@
 Type: Package
 Package: campsismod
 Title: Generic Implementation of a PK/PD Model
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
 Description: A generic, easy-to-use and expandable implementation of a
@@ -29,7 +29,7 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Collate: 'global.R' 'data.R' 'utilities.R' 'special_operators.R'
         'check.R' 'generic.R' 'generic_element_list.R'
         'generic_element_position.R' 'generic_list.R' 'pattern.R'
@@ -45,8 +45,8 @@ Collate: 'global.R' 'data.R' 'utilities.R' 'special_operators.R'
         'model_add_suffix.R' 'rxode_model.R' 'rxode_conversion.R'
         'mrgsolve_model.R' 'mrgsolve_conversion.R'
 NeedsCompilation: no
-Packaged: 2023-04-11 11:51:36 UTC; nicolas.luyckx
+Packaged: 2023-10-11 13:27:04 UTC; nicolas.luyckx
 Author: Nicolas Luyckx [aut, cre]
 Maintainer: Nicolas Luyckx <nicolas.luyckx@calvagone.com>
 Repository: CRAN
-Date/Publication: 2023-04-11 12:10:06 UTC
+Date/Publication: 2023-10-12 10:30:23 UTC
