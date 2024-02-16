@@ -1,4 +1,4 @@
-## ---- echo=FALSE, warning=FALSE, message=FALSE, results='hide'----------------
+## ----echo=FALSE, warning=FALSE, message=FALSE, results='hide'-----------------
 EXPORT_PNG <- FALSE
 
 ## ----echo=TRUE, warning=FALSE, message=FALSE----------------------------------
@@ -22,13 +22,13 @@ error <- error %>% add(Equation("OBS_CP", "CP*(1 + EPS_PROP)"))
 model <- model %>% add(error)
 model
 
-## ---- eval=EXPORT_PNG---------------------------------------------------------
+## ----eval=EXPORT_PNG----------------------------------------------------------
 #  library(campsis)
 #  dataset <- Dataset(3) %>% add(Observations(seq(0,24,by=3)))
 #  results <- model %>% simulate(dataset=dataset, seed=0)
 #  spaghettiPlot(results, "OBS_CP")
 
-## ---- eval=EXPORT_PNG, echo=FALSE, results='hide'-----------------------------
+## ----eval=EXPORT_PNG, echo=FALSE, results='hide'------------------------------
 #  ggplot2::ggsave(filename="resources/minimalist_example_obs_cp.png", width=7, height=3, dpi=100)
 
 ## -----------------------------------------------------------------------------

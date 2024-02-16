@@ -1,4 +1,4 @@
-## ---- echo=FALSE, warning=FALSE, message=FALSE, results='hide'----------------
+## ----echo=FALSE, warning=FALSE, message=FALSE, results='hide'-----------------
 EXPORT_PNG <- FALSE
 
 ## ----echo=TRUE, warning=FALSE, message=FALSE----------------------------------
