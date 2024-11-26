@@ -5,7 +5,7 @@ EXPORT_PNG <- FALSE
 library(campsismod)
 
 ## ----echo=FALSE---------------------------------------------------------------
-xfun::embed_file('resources/campsis_npp_plugin.xml', text="download Notepad++ plugin for CAMPSIS")
+xfun::embed_file('resources/campsis_npp_plugin.xml', text="download Notepad++ plugin for Campsis")
 
 ## ----eval=TRUE----------------------------------------------------------------
 model <- read.campsis("resources/minimalist_model/")

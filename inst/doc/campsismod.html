@@ -12,7 +12,7 @@
 
 
 
-<title>Get started with CAMPSIS model</title>
+<title>Get started with Campsis model</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -336,7 +336,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Get started with CAMPSIS model</h1>
+<h1 class="title toc-ignore">Get started with Campsis model</h1>
 
 
 
@@ -405,8 +405,8 @@ content.</p>
 ## A_PERIPHERAL (CMT=3)</code></pre>
 </div>
 <div id="write-campsis-model" class="section level3">
-<h3>Write CAMPSIS model</h3>
-<p>A CAMPSIS model can be persisted on your local drive as follows:</p>
+<h3>Write Campsis model</h3>
+<p>A Campsis model can be persisted on your local drive as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">write</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">&quot;path_to_model_folder&quot;</span>)</span></code></pre></div>
@@ -416,8 +416,8 @@ records) and 1 <code>csv</code> file per type of parameter (THETA, OMEGA
 and SIGMA).</p>
 </div>
 <div id="read-campsis-model" class="section level3">
-<h3>Read CAMPSIS model</h3>
-<p>To read a CAMPSIS model from your local drive, use the
+<h3>Read Campsis model</h3>
+<p>To read a Campsis model from your local drive, use the
 <code>read.campsis</code> function. The exact same model should be
 retrieved.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">read.campsis</span>(<span class="at">file=</span><span class="st">&quot;path_to_model_folder&quot;</span>)</span>
@@ -482,15 +482,15 @@ depending on the simulation time. The <code>ERROR</code> record is the
 place where the error model is defined. The model parameters are then
 shown, followed by the all the compartments.</p>
 </div>
-<div id="export-campsis-model-to-rxode" class="section level3">
-<h3>Export CAMPSIS model to RxODE</h3>
+<div id="export-campsis-model-to-rxode2" class="section level3">
+<h3>Export Campsis model to rxode2</h3>
 <p><code>campsismod</code> has powerful export capabilities to
-<code>RxODE</code> and <code>mrgsolve</code>, the 2 simulation engines
+<code>rxode2</code> and <code>mrgsolve</code>, the 2 simulation engines
 supported by <code>campsis</code>. The following code exports the model
-to <code>RxODE</code>. Please note that this step is implicit in CAMPSIS
-when you call the <code>simulate</code> method with your preferred
-simulation engine.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>rxmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;RxODE&quot;</span>)</span>
+to <code>rxode2</code>. Please note that this step is implicit in
+Campsis when you call the <code>simulate</code> method with your
+preferred simulation engine.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>rxmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;rxode2&quot;</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>rxmod</span></code></pre></div>
 <pre><code>## An object of class &quot;rxode_model&quot;
 ## Slot &quot;code&quot;:
@@ -532,7 +532,7 @@ simulation engine.</p>
 ## EPS_PROP_RUV         0.01</code></pre>
 </div>
 <div id="export-campsis-model-to-mrgsolve" class="section level3">
-<h3>Export CAMPSIS model to mrgsolve</h3>
+<h3>Export Campsis model to mrgsolve</h3>
 <p>The following code exports the model to <code>mrgsolve</code> (text
 form).</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>mrgmod <span class="ot">&lt;-</span> model <span class="sc">%&gt;%</span> <span class="fu">export</span>(<span class="at">dest=</span><span class="st">&quot;mrgsolve&quot;</span>)</span>

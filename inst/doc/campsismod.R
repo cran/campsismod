@@ -14,7 +14,7 @@ model <- read.campsis(file="path_to_model_folder")
 show(model)
 
 ## -----------------------------------------------------------------------------
-rxmod <- model %>% export(dest="RxODE")
+rxmod <- model %>% export(dest="rxode2")
 rxmod
 
 ## -----------------------------------------------------------------------------
