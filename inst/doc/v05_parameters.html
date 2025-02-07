@@ -409,25 +409,25 @@ defined.</p>
 <p>To retrieve a parameter by its name, just call the method
 <code>find</code> as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Theta</span>(<span class="st">&quot;CL&quot;</span>))</span></code></pre></div>
-<pre><code>##   name index value   fix     label unit comment
-## 1   CL     6     3 FALSE Clearance  L/h    &lt;NA&gt;</code></pre>
+<pre><code>##   name index value min max   fix     label unit comment
+## 1   CL     6     3  NA  NA FALSE Clearance  L/h    &lt;NA&gt;</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Omega</span>(<span class="st">&quot;KA&quot;</span>))</span></code></pre></div>
-<pre><code>##   name index index2 value   fix type same label comment
-## 1   KA     1      1    25 FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<pre><code>##   name index index2 value min max   fix type same label comment
+## 1   KA     1      1    25  NA  NA FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="sc">%&gt;%</span> <span class="fu">find</span>(<span class="fu">Sigma</span>(<span class="st">&quot;RUV_FIX&quot;</span>))</span></code></pre></div>
 <pre><code>## NULL</code></pre>
 <p>These parameters can also alternatively be retrieved by their
 index(es). Use the specific method <code>getByIndex</code> created for
 that purpose:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Theta</span>(<span class="at">index=</span><span class="dv">5</span>))</span></code></pre></div>
-<pre><code>##   name index value   fix                  label unit comment
-## 1    Q     5    20 FALSE Inter-compartment flow  L/h    &lt;NA&gt;</code></pre>
+<pre><code>##   name index value min max   fix                  label unit comment
+## 1    Q     5    20  NA  NA FALSE Inter-compartment flow  L/h    &lt;NA&gt;</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Omega</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
-<pre><code>##   name index index2 value   fix type same label comment
-## 1   KA     1      1    25 FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<pre><code>##   name index index2 value min max   fix type same label comment
+## 1   KA     1      1    25  NA  NA FALSE  cv%   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>model<span class="sc">@</span>parameters <span class="sc">%&gt;%</span> <span class="fu">getByIndex</span>(<span class="fu">Sigma</span>(<span class="at">index=</span><span class="dv">1</span>, <span class="at">index2=</span><span class="dv">1</span>))</span></code></pre></div>
-<pre><code>##       name index index2 value   fix type label comment
-## 1 PROP_RUV     1      1   0.1 FALSE   sd  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<pre><code>##       name index index2 value min max   fix type label comment
+## 1 PROP_RUV     1      1   0.1  NA  NA FALSE   sd  &lt;NA&gt;    &lt;NA&gt;</code></pre>
 </div>
 <div id="access-parameter-values" class="section level3">
 <h3>Access parameter values</h3>
@@ -451,8 +451,8 @@ deviation.</p>
 <pre><code>## [1] 15</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>theta_standardised <span class="ot">&lt;-</span> theta <span class="sc">%&gt;%</span> <span class="fu">standardise</span>() <span class="co"># Conversion to variance</span></span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>theta_standardised </span></code></pre></div>
-<pre><code>##   name index index2      value   fix type same label comment
-## 1 TEST     1      1 0.02225061 FALSE  var   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
+<pre><code>##   name index index2      value min max   fix type same label comment
+## 1 TEST     1      1 0.02225061  NA  NA FALSE  var   NA  &lt;NA&gt;    &lt;NA&gt;</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>theta_standardised<span class="sc">@</span>value</span></code></pre></div>
 <pre><code>## [1] 0.02225061</code></pre>
 </div>

@@ -22,17 +22,17 @@ model <- model %>% add(LagTime(compartment=1, "2"))
 model
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  library(campsis)
-#  dataset <- Dataset(5) %>%
-#    add(Infusion(time=0, amount=1000)) %>%
-#    add(Observations(seq(0,36,by=0.5)))
+# library(campsis)
+# dataset <- Dataset(5) %>%
+#   add(Infusion(time=0, amount=1000)) %>%
+#   add(Observations(seq(0,36,by=0.5)))
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  results <- model %>% simulate(dataset=dataset, seed=1)
-#  spaghettiPlot(results, "A_CENTRAL")
+# results <- model %>% simulate(dataset=dataset, seed=1)
+# spaghettiPlot(results, "A_CENTRAL")
 
 ## ----eval=EXPORT_PNG, echo=FALSE, results='hide'------------------------------
-#  ggplot2::ggsave(filename="resources/minimalist_example_cmt_properties.png", width=7, height=3, dpi=100)
+# ggplot2::ggsave(filename="resources/minimalist_example_cmt_properties.png", width=7, height=3, dpi=100)
 
 ## -----------------------------------------------------------------------------
 model %>% contains(Compartment(1)) 

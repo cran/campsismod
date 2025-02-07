@@ -23,13 +23,13 @@ model <- model %>% add(error)
 model
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  library(campsis)
-#  dataset <- Dataset(3) %>% add(Observations(seq(0,24,by=3)))
-#  results <- model %>% simulate(dataset=dataset, seed=0)
-#  spaghettiPlot(results, "OBS_CP")
+# library(campsis)
+# dataset <- Dataset(3) %>% add(Observations(seq(0,24,by=3)))
+# results <- model %>% simulate(dataset=dataset, seed=0)
+# spaghettiPlot(results, "OBS_CP")
 
 ## ----eval=EXPORT_PNG, echo=FALSE, results='hide'------------------------------
-#  ggplot2::ggsave(filename="resources/minimalist_example_obs_cp.png", width=7, height=3, dpi=100)
+# ggplot2::ggsave(filename="resources/minimalist_example_obs_cp.png", width=7, height=3, dpi=100)
 
 ## -----------------------------------------------------------------------------
 model %>% contains(Equation("CP"))

@@ -19,22 +19,22 @@ pkpd_model <- pk_model %>% add(pd_model)
 pkpd_model
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  library(campsis)
-#  dataset <- Dataset(25) %>%
-#    add(Bolus(time=0, amount=1000, compartment=1, ii=12, addl=2)) %>%
-#    add(Observations(times=0:36))
-#  results <- pkpd_model %>% simulate(dataset=dataset, seed=1)
-#  shadedPlot(results, "CONC")
+# library(campsis)
+# dataset <- Dataset(25) %>%
+#   add(Bolus(time=0, amount=1000, compartment=1, ii=12, addl=2)) %>%
+#   add(Observations(times=0:36))
+# results <- pkpd_model %>% simulate(dataset=dataset, seed=1)
+# shadedPlot(results, "CONC")
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  shadedPlot(results, "CONC")
+# shadedPlot(results, "CONC")
 
 ## ----eval=EXPORT_PNG, echo=FALSE, results='hide'------------------------------
-#  ggplot2::ggsave(filename="resources/pkpd_model_concentration.png", width=7, height=3, dpi=100)
+# ggplot2::ggsave(filename="resources/pkpd_model_concentration.png", width=7, height=3, dpi=100)
 
 ## ----eval=EXPORT_PNG----------------------------------------------------------
-#  shadedPlot(results, "EFFECT")
+# shadedPlot(results, "EFFECT")
 
 ## ----eval=EXPORT_PNG, echo=FALSE, results='hide'------------------------------
-#  ggplot2::ggsave(filename="resources/pkpd_model_effect.png", width=7, height=3, dpi=100)
+# ggplot2::ggsave(filename="resources/pkpd_model_effect.png", width=7, height=3, dpi=100)
 
