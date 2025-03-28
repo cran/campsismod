@@ -1,6 +1,6 @@
-8fe9a4dd08b1d4b3873eeb2682a73bd8 *DESCRIPTION
+f8d29551467ec14e3996d0b36790528b *DESCRIPTION
 0b5b692a99794505fc28f7913dce6933 *NAMESPACE
-5a86f7cf55ec7add47a9a8f4f1022422 *NEWS.md
+7177656954b59704601c0599367a696d *NEWS.md
 827f4befd3f0993309d0a30bebdc6f6f *R/campsis_model.R
 b8cf643cb7ec78efbfb12befa3dd39f9 *R/check.R
 a4ad5e551f267a5e49cdb47076b6e605 *R/code_record.R
@@ -45,7 +45,7 @@ e9a2f85e19c5726ecfe78b724449eb65 *R/replication_settings.R
 247371c560db6f038424e85e7cb9c5f5 *R/special_operators.R
 29a49a2a46abb48c409dc271019c4be5 *R/utilities.R
 b4be84c6cba99b9116086663f80e19ea *README.md
-2c6d3502f3d5d35b0d68e5eb203051b2 *build/vignette.rds
+4959c1cd09c6eb0e0f6fc9b778d5029e *build/vignette.rds
 889a08f732eca0c50e11cf1477fdaae3 *data/model_suite.rda
 89f35bbedf50beab95ce2eb72b7f8d53 *inst/doc/campsismod.R
 b02b5fcc223f2a1ccee9a38734ae92db *inst/doc/campsismod.Rmd
@@ -318,7 +318,7 @@ d2ee2e1c6f22833502fd79cf70763b8b *tests/testthat/testCampsisModel.R
 dd091e696a27e33b7bd712f85fb12981 *tests/testthat/testCodeRecords.R
 127a1289bf677287d4e3220fd5984748 *tests/testthat/testCompartments.R
 f35183a9a28c41d377dcfe7c35687e64 *tests/testthat/testGenericList.R
-8b56733d956196d1efd226845f914ad5 *tests/testthat/testMiscellaneous.R
+1c8611e21654bb01096bf9c91ba7294f *tests/testthat/testMiscellaneous.R
 536d8836bed5a5b2ed236b74b777e875 *tests/testthat/testModelLibrary.R
 92a0ad9764b34b1f7d26d18345b49bd0 *tests/testthat/testModelParser.R
 b1a3ecbf10b7577881a16f6e8e298bae *tests/testthat/testMrgsolveConversion.R
@@ -328,12 +328,12 @@ fe240da5d8dde0202ed9dae130549aae *tests/testthat/testNONMEMConversion.R
 9fbbe39ef614dabe7e9692e069ec98aa *tests/testthat/testPattern.R
 3713a0eb49c86b3787593532831147a2 *tests/testthat/testReadWrite.R
 e8fc58359e13c7356070e8b516da5880 *tests/testthat/testRecordDelimiters.R
-e7e94a58bdddf59bc9759b07a07173d9 *tests/testthat/testReplicatedCampsisModel.R
+e3571d01c18a86499db487d601e14392 *tests/testthat/testReplicatedCampsisModel.R
 be1881b4191ee896d2483b79e8163893 *tests/testthat/testRxODEConversion.R
 2ca193563a30f99c89b207e818a81a55 *tests/testthat/testShowUncertainty.R
 0cc4a5c9ace7772522da0a4184848cb3 *tests/testthat/testSimulationTimeConversion.R
 78cff6832ac9f2b85eb0a14135429571 *tests/testthat/testUtilities.R
-24a6b63ea85b837887e8a7f12b3717ca *tests/testthat/testUtils.R
+b05482151d7bb937852057b03b017548 *tests/testthat/testUtils.R
 f68240b552d42d5f0ded54a25fdf7b67 *tests/testthat/testWarnings.R
 c2c9d15dcef93411c118b69699bcdad1 *tests/testthat/write/models/advan1_trans1/model.campsis
 7d20a5893207868ffcf69e62e4b6bc43 *tests/testthat/write/models/advan1_trans1/omega.csv
