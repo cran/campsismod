@@ -1,7 +1,7 @@
 Type: Package
 Package: campsismod
 Title: Generic Implementation of a PK/PD Model
-Version: 1.2.2
+Version: 1.2.3
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
 Description: A generic, easy-to-use and expandable implementation of a
@@ -49,8 +49,8 @@ Collate: 'global.R' 'data.R' 'utilities.R' 'special_operators.R'
         'rxode_model.R' 'rxode_conversion.R' 'mrgsolve_model.R'
         'mrgsolve_conversion.R'
 NeedsCompilation: no
-Packaged: 2025-03-28 09:36:47 UTC; nicolas.luyckx
+Packaged: 2025-07-31 13:19:57 UTC; nicolas.luyckx
 Author: Nicolas Luyckx [aut, cre]
 Maintainer: Nicolas Luyckx <nicolas.luyckx@calvagone.com>
 Repository: CRAN
-Date/Publication: 2025-03-28 12:20:06 UTC
+Date/Publication: 2025-07-31 14:10:02 UTC

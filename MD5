@@ -1,6 +1,6 @@
-f8d29551467ec14e3996d0b36790528b *DESCRIPTION
+f3f84e4eb90dcae249cf3e4748d77276 *DESCRIPTION
 0b5b692a99794505fc28f7913dce6933 *NAMESPACE
-7177656954b59704601c0599367a696d *NEWS.md
+e992fafc84a6d5f946b09156caccae4e *NEWS.md
 827f4befd3f0993309d0a30bebdc6f6f *R/campsis_model.R
 b8cf643cb7ec78efbfb12befa3dd39f9 *R/check.R
 a4ad5e551f267a5e49cdb47076b6e605 *R/code_record.R
@@ -29,7 +29,7 @@ a0985bbcfd4c5bfc21cfd868ec493c1c *R/generic_list.R
 99cc0c7c1a1e68448b5ae66cfc1658ac *R/model_parser.R
 d92e31d4731bfe3fc7418e862e6507d7 *R/model_statement.R
 3b5a082619ebdfcc8ceaff01ec6e2b5d *R/model_statements.R
-ba8eb303fbb8ec39822ba73a775a8e85 *R/model_unknown_statement.R
+557f83dfc051efabe2a43fed3c0c70c1 *R/model_unknown_statement.R
 76f4a05880b3e6d506e0716e209e451b *R/mrgsolve_conversion.R
 43cbac1c81a0d7250aeb5d4c37bbd090 *R/mrgsolve_model.R
 51a1bc253658bd34fead8eef14f752eb *R/omega_block.R
@@ -234,7 +234,7 @@ fa9d1f442a98fc40f1b2030029597d8d *man/read.varcov.Rd
 1e1ce44f1b053e16f7e77e7c20b59de8 *man/removeNaColumn.Rd
 8df1cff456e52441bf28d3bc0a0dae7e *man/removeTrailingLineBreaks.Rd
 c42e082cf37d9e4a1f33a1525a393972 *man/replace.Rd
-8d044b5529a30774b8175fecc4cf56b2 *man/replaceAll.Rd
+870b36467be29a83c554766b34966f2c *man/replaceAll.Rd
 876c55d5c7690cce20ecc336af4f7028 *man/replicate.Rd
 a3000cef97c773b3bca5e9fd34f42727 *man/replicated_campsis_model-class.Rd
 f3d7862946c28d715ac681da8d05885a *man/replication_settings-class.Rd
@@ -325,7 +325,7 @@ b1a3ecbf10b7577881a16f6e8e298bae *tests/testthat/testMrgsolveConversion.R
 fe240da5d8dde0202ed9dae130549aae *tests/testthat/testNONMEMConversion.R
 2d8e38cf1274c06419cfba6e291d4d55 *tests/testthat/testParameter.R
 4acde7bc059451f895fb6c30bd64c75a *tests/testthat/testParameters.R
-9fbbe39ef614dabe7e9692e069ec98aa *tests/testthat/testPattern.R
+86220e057bd76026c9111e72c2eeb438 *tests/testthat/testPattern.R
 3713a0eb49c86b3787593532831147a2 *tests/testthat/testReadWrite.R
 e8fc58359e13c7356070e8b516da5880 *tests/testthat/testRecordDelimiters.R
 e3571d01c18a86499db487d601e14392 *tests/testthat/testReplicatedCampsisModel.R
